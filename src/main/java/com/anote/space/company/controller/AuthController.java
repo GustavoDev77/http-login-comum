@@ -40,10 +40,17 @@ public class AuthController {
             return ResponseEntity.status(400).body("Todos os campos devem ser preenchidos");
         }
 
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        if (!email.matches(emailRegex)) {
+            return ResponseEntity.status(400).body("Email inválido");
+        }
+
         boolean sucesso = authService.registrar(nome, email, senha);
-        return sucesso
-                ? ResponseEntity.ok("Usuário registrado com sucesso")
-                : ResponseEntity.badRequest().body("Usuário já existe");
+        if (sucesso) {
+            return ResponseEntity.ok("Usuário registrado com sucesso");
+        } else {
+            return ResponseEntity.status(409).body("Usuário já existe");
+        }
     }
 
     @GetMapping("/check")

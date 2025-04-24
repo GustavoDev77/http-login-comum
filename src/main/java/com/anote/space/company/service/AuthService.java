@@ -19,7 +19,7 @@ public class AuthService {
 
     public boolean registrar(String nome, String email, String senha) {
         if (usuarioRepository.findByEmail(email).isPresent()) {
-            return false; // Usuário já existe
+            return false;
         }
 
         String senhaCriptografada = passwordEncoder.encode(senha);
@@ -32,7 +32,7 @@ public class AuthService {
     }
 
     public boolean login(String email, String senha) {
-        System.out.println("Tentando fazer login com email: " + email + " e senha: " + senha);  // Adicionando um log para verificar os dados recebidos
+        System.out.println("Tentando fazer login com email: " + email + " e senha: " + senha);
 
         if (senha == null) {
             System.err.println("Erro: Senha não fornecida");
