@@ -3,9 +3,12 @@ package com.anote.space.company.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class SecurityConfig {
@@ -13,21 +16,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) //
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/login", "/register").permitAll()
+                        .requestMatchers("/", "/index.html", "/style.css", "/login.js", "/img/**", "/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/dashboard", true)
-                        .permitAll()
+                .sessionManagement(sess -> sess
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .permitAll()
-                );
+                .cors(cors -> {});
+
         return http.build();
     }
 
@@ -35,6 +33,18 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-}
 
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:8080")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowCredentials(true);
+            }
+        };
+    }
+}
 
