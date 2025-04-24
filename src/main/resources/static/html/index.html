@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../css/style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="style.css"> <!-- Link para o arquivo CSS -->
+    <title>Anote/Space</title>
 </head>
 <body>
 
 <div class="container">
-    <h1>Login</h1>
+    <h1>Anote/Space</h1>
     <div class="input_box">
         <input type="email" id="email" placeholder="Email" required>
     </div>
@@ -20,7 +21,7 @@
     <div id="message" class="message"></div>
 
     <div class="register_link">
-        <p>Não tem uma conta? <a href="registro.html">Cadastre-se</a></p>
+        <p>Não tem uma conta? <a href="/html/registro.html">Cadastre-se</a></p>
     </div>
 
 </div>
@@ -31,17 +32,14 @@
         var senha = document.getElementById('senha').value;
         var messageDiv = document.getElementById('message');
 
-        // Limpar mensagens anteriores
         messageDiv.innerHTML = '';
 
-        // Verificar se os campos estão preenchidos
         if (!email || !senha) {
             messageDiv.innerHTML = "Por favor, preencha todos os campos.";
             messageDiv.classList.add("error");
             return;
         }
 
-        // Enviar a requisição de login
         fetch('http://localhost:8080/auth/login', {
             method: 'POST',
             headers: {
@@ -55,9 +53,8 @@
         })
         .then(response => {
             if (response.ok) {
-                return response.text();  // Sucesso, apenas retorno de texto
+                return response.text();
             } else {
-                // Resposta com erro (401 ou outro erro)
                 return response.text().then(text => {
                     throw new Error(text);
                 });

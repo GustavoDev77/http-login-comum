@@ -18,7 +18,16 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html", "/style.css", "/registro.html","/registro.js", "/login.js", "/img/**", "/auth/**").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/html/index.html",
+                                "/html/registro.html",
+                                "/css/style.css",
+                                "/js/login.js",
+                                "/js/registro.js",
+                                "/img/**",
+                                "/auth/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess
